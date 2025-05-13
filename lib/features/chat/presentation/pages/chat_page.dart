@@ -4,7 +4,7 @@ import 'package:operatortracker/core/session/SessionManager.dart';
 import '../bloc/chat_bloc.dart';
 import '../bloc/chat_event.dart';
 import '../bloc/chat_state.dart';
-import '../../../../injection.dart';
+import '../../../../core/di/injection.dart';
 
 class ChatPage extends StatefulWidget {
   final String unitId;

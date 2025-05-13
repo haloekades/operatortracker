@@ -6,9 +6,9 @@ import 'chat_event.dart';
 import 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
-  final GetChatMessages getMessages;
-  final SendChatMessage sendMessage;
-  final ListenChatMessages listenMessages;
+  final GetChatMessagesUseCase getMessages;
+  final SendChatMessageUseCase sendMessage;
+  final ListenChatMessagesUseCase listenMessages;
 
   ChatBloc({
     required this.getMessages,

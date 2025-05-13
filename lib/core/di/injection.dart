@@ -13,14 +13,12 @@ import 'package:operatortracker/features/login/data/repositories/login_repositor
 import 'package:operatortracker/features/login/domain/repositories/login_repository.dart';
 import 'package:operatortracker/features/login/domain/usecases/login_usecase.dart';
 import 'package:operatortracker/features/login/presentation/bloc/login_bloc.dart';
-import 'features/registrationdevice/data/datasources/installation_remote_datasource.dart';
-import 'features/registrationdevice/data/repositories/installation_repository_impl.dart';
-import 'features/registrationdevice/domain/repositories/installation_repository.dart';
-import 'features/registrationdevice/domain/usecases/check_device_usecase.dart';
-import 'features/registrationdevice/domain/usecases/register_device_usecase.dart';
-import 'features/registrationdevice/domain/usecases/login_usecase.dart';
-import 'features/registrationdevice/domain/usecases/activate_device_usecase.dart';
-import 'features/registrationdevice/presentation/bloc/installation_bloc.dart';
+import '../../features/registrationdevice/data/datasources/installation_remote_datasource.dart';
+import '../../features/registrationdevice/data/repositories/installation_repository_impl.dart';
+import '../../features/registrationdevice/domain/repositories/installation_repository.dart';
+import '../../features/registrationdevice/domain/usecases/check_device_usecase.dart';
+import '../../features/registrationdevice/domain/usecases/register_device_usecase.dart';
+import '../../features/registrationdevice/presentation/bloc/installation_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -30,16 +28,12 @@ Future<void> init() async {
     () => InstallationBloc(
       checkDevice: sl(),
       registerDevice: sl(),
-      login: sl(),
-      activateDevice: sl(),
     ),
   );
 
   // Use cases
   sl.registerLazySingleton(() => CheckDeviceUseCase(sl()));
   sl.registerLazySingleton(() => RegisterDeviceUseCase(sl()));
-  sl.registerLazySingleton(() => LoginAdminUseCase(sl()));
-  sl.registerLazySingleton(() => ActivateDeviceUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<InstallationRepository>(
@@ -66,9 +60,9 @@ Future<void> init() async {
 
   // Chat Feature
   sl.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(sl(), sl()));
-  sl.registerLazySingleton(() => GetChatMessages(sl()));
-  sl.registerLazySingleton(() => SendChatMessage(sl()));
-  sl.registerLazySingleton(() => ListenChatMessages(sl()));
+  sl.registerLazySingleton(() => GetChatMessagesUseCase(sl()));
+  sl.registerLazySingleton(() => SendChatMessageUseCase(sl()));
+  sl.registerLazySingleton(() => ListenChatMessagesUseCase(sl()));
   sl.registerFactory(
     () => ChatBloc(getMessages: sl(), sendMessage: sl(), listenMessages: sl()),
   );

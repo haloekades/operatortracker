@@ -5,7 +5,7 @@ import 'package:operatortracker/features/chat/presentation/bloc/chat_event.dart'
 import 'package:operatortracker/features/chat/presentation/pages/chat_page.dart';
 import 'package:operatortracker/features/login/presentation/bloc/login_bloc.dart';
 import 'package:operatortracker/features/login/presentation/pages/login_page.dart';
-import 'injection.dart' as di;
+import 'core/di/injection.dart' as di;
 import 'features/registrationdevice/presentation/pages/installation_page.dart';
 import 'features/registrationdevice/presentation/bloc/installation_bloc.dart';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:operatortracker/core/services/websocket_service.dart';
 import 'package:operatortracker/features/chat/presentation/pages/chat_page.dart';
 import 'package:operatortracker/features/home/presentation/bloc/home_bloc.dart';
 import 'package:operatortracker/features/home/presentation/bloc/home_event.dart';
@@ -16,7 +17,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Home')),
       body: BlocProvider(
-        create: (context) => HomeBloc()..add(HomeStarted(loginEntity)),
+        create: (context) => HomeBloc(WebSocketService())..add(HomeStarted(loginEntity)),
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading) {

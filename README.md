@@ -1,40 +1,129 @@
-# Flutter Operator Tracker
+## 📱 Project Overview
 
-A Flutter application built with clean architecture that supports device registration, user login, activity selection, static map rendering, and real-time chat using WebSockets.
+This is a **Operational Tracker App** designed for industrial or operational use, with a focus on device-based login, activity selection, and real-time communication through a WebSocket-powered chat feature. The project is structured using **Clean Architecture**, **BLoC**, and **Dependency Injection** to ensure testability, maintainability, and scalability.
 
 ---
 
-## ✨ Features
+## 🔧 Features
 
-### 1. 📱 Register Device
-- On first launch, the app guides the user through device registration.
-- Registers a unique device ID with the backend.
+### 1. 🔐 Register Device
+- Registers the tablet device with the backend system using a unique device ID.
+- If the device is not registered or activated, appropriate states are shown in the installation wizard.
 
-### 2. 🔐 Login Page
-- Allows users to log in using their NIK (employee ID or similar).
-- Validates credentials and stores session securely.
+### 2. 👤 Login Page
+- Allows the user to log in using a **NIK** (employee identification number).
 
-### 3. 🗺️ Home
-- After login, users land on the home screen.
-- Displays a list of available activities.
-- Shows a static map as a placeholder.
+### 3. 🗺️ Home Page
+- Simple dashboard for selecting user activities.
+- Renders a **static map view** for the assigned unit (or location).
+- Starts listening to equipment messages via WebSocket upon entering this screen.
 
 ### 4. 💬 Chat
-- Real-time chat feature.
-- Messages are received via **WebSocket** using [Centrifuge](https://github.com/centrifugal/centrifuge-dart) v0.8.0.
-- Messages are sent using a REST API.
-- Displays chat history and supports sending/receiving messages instantly.
+- Enables real-time chat functionality using **WebSocket** (Centrifugo v0.8.0).
+- Fetches message history via REST API.
+- Sends and listens to new messages in real time.
+- Messages are styled depending on the sender (self vs others).
 
 ---
 
-## 🛠 Tech Stack
+## 🧪 Unit Testing
 
-| Technology       | Description                          |
-|------------------|--------------------------------------|
-| **Flutter**      | Mobile SDK for Android & iOS         |
-| **BLoC**         | State management via `flutter_bloc`  |
-| **Clean Architecture** | Domain-driven design with clear separation of concerns |
-| **WebSocket**    | Real-time updates via Centrifuge     |
-| **Dependency Injection** | Using `get_it` for DI container |
+All core business logic has been covered by unit tests:
+
+### ✅ Tested Use Cases
+- `CheckDeviceUseCase`
+- `RegisterDeviceUseCase`
+- `LoginUseCase`
+- `GetChatMessagesUseCase`
+- `SendChatMessageUseCase`
+- `ListenChatMessagesUseCase`
+
+### ✅ Tested BLoCs
+- `InstallationBloc`
+- `LoginBloc`
+- `ChatBloc`
+- `HomeBloc`
+
+Unit testing includes:
+- State transitions
+- Handling of API success/failure
+- Simulated WebSocket message flows
 
 ---
+
+## 🛠️ Tech Stack
+
+### 📱 Framework
+- **Flutter**: Cross-platform UI toolkit
+
+### 🧠 State Management
+- **BLoC (flutter_bloc)**: Event-based predictable state management
+
+### 🧱 Architecture
+- **Clean Architecture**:
+    - `Domain`: Use Cases and Entities
+    - `Data`: API implementations, repositories
+    - `Presentation`: UI and BLoC/Event/State management
+
+### 🌐 Real-Time Messaging
+- **WebSocket**: Using [Centrifugo v0.8.0](https://centrifugal.dev)
+- Integration through a service class wrapping `web_socket_channel` or `centrifuge-dart`
+
+### 🧩 Dependency Injection
+- **GetIt**: Service locator for injecting use cases, repositories, and services
+
+### 🧪 Testing
+- **bloc_test**: For BLoC state testing
+- **mockito**: For mocking dependencies
+- **build_runner**: For generating mocks
+
+---
+
+## 📁 Project Structure (Feature-Based)
+
+```
+lib/
+├── core/
+│   └── constants/        # Constant variable
+│   └── services/         # Websocket services
+│   └── di/               # Dependency Injection Setup
+│   └── session/          # To save session
+├── features/
+│   ├── installation/      # Device registration feature
+│   ├── login/             # NIK-based login
+│   ├── home/              # Activity selection & dummy static map, subscribe websocket to show popup message
+│   ├── chat/              # Chat via WebSocket
+└── main.dart
+```
+
+## 🚀 Getting Started
+
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/haloekades/operatortracker.git
+   cd operatortracker
+   ```
+
+2. Install dependencies:
+   ```bash
+   flutter pub get
+   ```
+
+3. Run the app:
+   ```bash
+   flutter run
+   ```
+
+4. Run tests:
+   ```bash
+   flutter test
+   ```
+   
+---
+
+## 📱 Screen Recording Running App
+
+- [Screen Recording](https://drive.google.com/file/d/1f7fvkfJMby24X5zo2gcRewQyx8dNdXSX/view)
+
+
+© 2025 Operational Tracker App by Ekades

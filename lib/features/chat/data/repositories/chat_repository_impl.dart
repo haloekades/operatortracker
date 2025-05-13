@@ -6,7 +6,7 @@ import 'package:operatortracker/core/services/websocket_service.dart';
 import 'package:operatortracker/core/session/SessionManager.dart';
 import 'package:operatortracker/features/chat/domain/entities/message_entity.dart';
 import 'package:operatortracker/features/chat/domain/repositories/chat_repository.dart';
-import 'package:operatortracker/injection.dart';
+import 'package:operatortracker/core/di/injection.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
   final http.Client client;

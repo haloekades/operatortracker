@@ -4,8 +4,9 @@ import 'package:operatortracker/features/home/presentation/bloc/home_event.dart'
 import 'package:operatortracker/features/home/presentation/bloc/home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
+  final WebSocketService webSocketService;
 
-  HomeBloc() : super(HomeLoading()) {
+  HomeBloc(this.webSocketService) : super(HomeLoading()) {
     on<HomeStarted>(_onStarted);
     on<HomeShowMessage>((event, emit) async {
       emit(HomeLoaded(loginEntity: event.loginEntity, message: event.message));
@@ -16,7 +17,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
     emit(HomeLoaded(loginEntity: event.loginEntity));
 
-    await WebSocketService().connectMsgEquipment(
+    await webSocketService.connectMsgEquipment(
       event.loginEntity.unitId,
           (message) {
         add(HomeShowMessage(event.loginEntity, message));

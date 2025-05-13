@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:operatortracker/core/constants/api_constants.dart';
 import 'package:operatortracker/core/session/SessionManager.dart';
-import 'package:operatortracker/injection.dart';
+import 'package:operatortracker/core/di/injection.dart';
 import '../models/login_model.dart';
 
 abstract class LoginRemoteDataSource {
