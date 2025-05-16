@@ -12,6 +12,7 @@ import 'features/registrationdevice/presentation/bloc/installation_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
+
   runApp(MyApp());
 }
 
