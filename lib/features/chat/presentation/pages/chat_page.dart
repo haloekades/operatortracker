@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:operatortracker/core/session/SessionManager.dart';
 import '../bloc/chat_bloc.dart';
 import '../bloc/chat_event.dart';
 import '../bloc/chat_state.dart';
-import '../../../../core/di/injection.dart';
 
 class ChatPage extends StatefulWidget {
   final String unitId;
@@ -39,8 +37,9 @@ class _ChatPageState extends State<ChatPage> {
                         itemCount: state.messages.length,
                         itemBuilder: (_, i) {
                           final msg = state.messages[i];
+
                           final isMe =
-                              msg.senderNik == sl<SessionManager>().nik;
+                              msg.senderNik == state.myNik;
 
                           return Align(
                             alignment:

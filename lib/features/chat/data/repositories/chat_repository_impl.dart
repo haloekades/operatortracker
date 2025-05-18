@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:operatortracker/core/constants/api_constants.dart';
 import 'package:operatortracker/core/data/models/message_model.dart';
 import 'package:operatortracker/core/services/websocket_service.dart';
-import 'package:operatortracker/core/session/SessionManager.dart';
+import 'package:operatortracker/core/session/storage_manager.dart';
 import 'package:operatortracker/features/chat/domain/entities/message_entity.dart';
 import 'package:operatortracker/features/chat/domain/repositories/chat_repository.dart';
 import 'package:operatortracker/core/di/injection.dart';
@@ -16,10 +16,11 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<List<MessageEntity>> getMessages(String unitId) async {
+    final token = await sl<StorageManager>().loadToken();
     final response = await client.get(
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': sl<SessionManager>().token ?? '',
+        'Cookie': token ?? '',
       },
       Uri.parse(
         '${ApiConstants.baseUrl}/monitoring/messages?page=1&limit=10&sort=created_at,desc&equipment_id=$unitId',
@@ -43,11 +44,13 @@ class ChatRepositoryImpl implements ChatRepository {
       "device_type": "Mobile",
       "category_id": categoryId,
     };
+
+    final token = await sl<StorageManager>().loadToken();
     final response = await client.post(
       Uri.parse('${ApiConstants.baseUrl}/monitoring/messages'),
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': sl<SessionManager>().token ?? '',
+        'Cookie': token ?? '',
       },
       body: jsonEncode(body),
     );

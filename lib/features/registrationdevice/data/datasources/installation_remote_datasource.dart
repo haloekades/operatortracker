@@ -37,7 +37,7 @@ class InstallationRemoteDataSourceImpl implements InstallationRemoteDataSource {
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'id': deviceId,
-        'head_unit_sn': deviceId,
+        'head_unit_sn': deviceId.length > 20 ? deviceId.substring(0, 20) : deviceId
       }),
     );
     return response.statusCode == 201;

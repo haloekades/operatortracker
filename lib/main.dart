@@ -3,6 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:operatortracker/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:operatortracker/features/chat/presentation/bloc/chat_event.dart';
 import 'package:operatortracker/features/chat/presentation/pages/chat_page.dart';
+import 'package:operatortracker/features/home/presentation/bloc/home_bloc.dart';
+import 'package:operatortracker/features/home/presentation/bloc/home_event.dart';
+import 'package:operatortracker/features/home/presentation/pages/home_page.dart';
+import 'package:operatortracker/features/login/domain/entities/login_entity.dart';
 import 'package:operatortracker/features/login/presentation/bloc/login_bloc.dart';
 import 'package:operatortracker/features/login/presentation/pages/login_page.dart';
 import 'core/di/injection.dart' as di;
@@ -35,8 +39,17 @@ class MyApp extends StatelessWidget {
           case '/login':
             return MaterialPageRoute(
               builder: (_) => BlocProvider(
-                create: (_) => di.sl<LoginBloc>(),
+                create: (_) => di.sl<LoginBloc>()..add(LoginStarted()),
                 child: LoginPage(),
+              ),
+            );
+
+          case '/home':
+            final loginEntity = settings.arguments as LoginEntity;
+            return MaterialPageRoute(
+              builder: (_) => BlocProvider(
+                create: (context) => di.sl<HomeBloc>()..add(HomeStarted(loginEntity)),
+                child: HomePage(loginEntity: loginEntity),
               ),
             );
 

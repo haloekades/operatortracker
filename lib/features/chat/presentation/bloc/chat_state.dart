@@ -12,11 +12,12 @@ class ChatLoading extends ChatState {}
 
 class ChatLoaded extends ChatState {
   final List<MessageEntity> messages;
+  final String myNik;
 
-  ChatLoaded(this.messages);
+  ChatLoaded(this.messages, this.myNik);
 
   @override
-  List<Object?> get props => [messages];
+  List<Object?> get props => [messages, myNik];
 }
 
 class ChatError extends ChatState {

@@ -20,4 +20,28 @@ class LoginEntity {
     required this.unitCode,
     required this.isActive,
   });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'nik': nik,
+    'name': name,
+    'roleName': roleName,
+    'email': email,
+    'phone': phone,
+    'unitId': unitId,
+    'unitCode': unitCode,
+    'isActive': isActive,
+  };
+
+  factory LoginEntity.fromJson(Map<String, dynamic> json) => LoginEntity(
+    id: json['id'],
+    nik: json['nik'],
+    name: json['name'],
+    roleName: json['roleName'],
+    email: json['email'],
+    phone: json['phone'],
+    unitId: json['unitId'],
+    unitCode: json['unitCode'],
+    isActive: json['isActive'],
+  );
 }

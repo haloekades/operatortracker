@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:operatortracker/features/home/presentation/pages/home_page.dart';
 import '../bloc/login_bloc.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,14 +21,12 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => HomePage(loginEntity: state.user)),
-                    (Route<dynamic> route) => false,
-              );
-            } else if (state is LoginError) {
-              ScaffoldMessenger.of(
+              Navigator.pushNamedAndRemoveUntil(
                 context,
-              ).showSnackBar(SnackBar(content: Text(state.message)));
+                '/home',
+                    (route) => false,
+                arguments: state.user,
+              );
             }
           },
           builder: (context, state) {
@@ -92,9 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5),
                                     ),
-                                    minimumSize: const Size.fromHeight(
-                                      50,
-                                    ),
+                                    minimumSize: const Size.fromHeight(50),
                                   ),
                                   child: const Text('Login'),
                                 ),

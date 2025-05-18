@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:operatortracker/core/bridge/device_info_bridge.dart';
 import 'package:operatortracker/core/services/websocket_service.dart';
 import 'package:operatortracker/features/registrationdevice/presentation/widgets/register_device_dialog.dart';
 import '../bloc/installation_bloc.dart';
@@ -20,9 +21,17 @@ class _InstallationPageState extends State<InstallationPage> {
   void initState() {
     super.initState();
     bloc = context.read<InstallationBloc>();
-    Future.delayed(Duration.zero, () {
-      bloc.add(StartInstallation('EK4DEVICES001'));
+    Future.delayed(Duration.zero, () async {
+      // final safeDeviceId = await getSafeDeviceId();
+      // bloc.add(StartInstallation(safeDeviceId));
+      bloc.add(StartInstallation('EK4DEVICES000'));
     });
+  }
+
+  static Future<String> getSafeDeviceId() async {
+    final deviceId = await DeviceInfoBridge.getDeviceId();
+    print('Device ID: $deviceId');
+    return deviceId?.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '') ?? '';
   }
 
   @override
@@ -36,7 +45,11 @@ class _InstallationPageState extends State<InstallationPage> {
           } else if (state is InstallationAwaitingActivation){
             RegisterDeviceDialog.updateState(true);
             WebSocketService().connect(state.deviceId, () {
-              Navigator.pushReplacementNamed(context, '/login');
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/login',
+                    (route) => false,
+              );
               WebSocketService().disconnect();
             });
           } else if (state is InstallationFailure) {
@@ -45,7 +58,11 @@ class _InstallationPageState extends State<InstallationPage> {
             );
             RegisterDeviceDialog.hide(context);
           } else if (state is InstallationSuccess) {
-            Navigator.pushReplacementNamed(context, '/login');
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+                  (route) => false,
+            );
           }
         },
         builder: (context, state) {

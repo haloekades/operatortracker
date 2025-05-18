@@ -12,12 +12,24 @@ class HomePage extends StatelessWidget {
 
   const HomePage({Key? key, required this.loginEntity}) : super(key: key);
 
+  void _logout(BuildContext context) {
+    context.read<HomeBloc>().add(HomeLogout());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Home')),
-      body: BlocProvider(
-        create: (context) => HomeBloc(WebSocketService())..add(HomeStarted(loginEntity)),
+      body: BlocListener<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state is HomeExit) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/login',
+              (route) => false,
+            );
+          }
+        },
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading) {
@@ -34,8 +46,19 @@ class HomePage extends StatelessWidget {
 
                   Positioned(
                     top: 40,
+                    right: 24,
+                    child: FloatingActionButton(
+                      heroTag: 'menu_fab',
+                      backgroundColor: Colors.red,
+                      onPressed: () => _logout(context),
+                      child: const Icon(Icons.logout),
+                    ),
+                  ),
+
+                  Positioned(
+                    top: 40,
                     left: 20,
-                    right: 20,
+                    right: 120,
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(

@@ -22,3 +22,10 @@ class HomeShowMessage extends HomeEvent {
   @override
   List<Object> get props => [loginEntity, message];
 }
+
+class HomeLogout extends HomeEvent {
+  const HomeLogout();
+
+  @override
+  List<Object> get props => [];
+}

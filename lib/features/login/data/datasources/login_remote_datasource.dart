@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:operatortracker/core/constants/api_constants.dart';
-import 'package:operatortracker/core/session/SessionManager.dart';
 import 'package:operatortracker/core/di/injection.dart';
+import 'package:operatortracker/core/session/storage_manager.dart';
 import '../models/login_model.dart';
 
 abstract class LoginRemoteDataSource {
@@ -42,9 +42,9 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
       if (body['status'] == true) {
         final loginModel = LoginModel.fromJson(body['data']);
 
-        // save nik && session
-        sl<SessionManager>().nik = loginModel.nik;
-        sl<SessionManager>().token = response.headers["set-cookie"];
+        // use storage
+        sl<StorageManager>().saveLoginEntity(loginModel.toEntity());
+        sl<StorageManager>().saveToken(response.headers["set-cookie"] ?? '');
 
         return loginModel;
       } else {

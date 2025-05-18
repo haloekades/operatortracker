@@ -4,13 +4,16 @@ import 'package:mockito/mockito.dart';
 import 'package:operatortracker/features/login/domain/entities/login_entity.dart';
 import 'package:operatortracker/features/login/presentation/bloc/login_bloc.dart';
 
+import '../../../mocks/mock_chat.mocks.dart';
 import '../../../mocks/mock_login.mocks.dart';
 
 void main() {
   late MockLoginUseCase mockLoginUseCase;
+  late MockStorageManager mockStorageManager;
 
   setUp(() {
     mockLoginUseCase = MockLoginUseCase();
+    mockStorageManager = MockStorageManager();
   });
 
   group('LoginBloc', () {
@@ -36,7 +39,7 @@ void main() {
           loginType: anyNamed('loginType'),
         )).thenAnswer((_) async => loginEntity);
 
-        return LoginBloc(loginUseCase: mockLoginUseCase);
+        return LoginBloc(loginUseCase: mockLoginUseCase, storage: mockStorageManager);
       },
       act: (bloc) => bloc.add(LoginSubmitted("EK4NIK000")),
       expect: () => [
@@ -55,12 +58,26 @@ void main() {
           loginType: anyNamed('loginType'),
         )).thenThrow(Exception("Login failed"));
 
-        return LoginBloc(loginUseCase: mockLoginUseCase);
+        return LoginBloc(loginUseCase: mockLoginUseCase, storage: mockStorageManager);
       },
       act: (bloc) => bloc.add(LoginSubmitted("invalid")),
       expect: () => [
         isA<LoginLoading>(),
         isA<LoginError>().having((e) => e.message, 'message', contains("Login failed")),
+      ],
+    );
+
+    blocTest<LoginBloc, LoginState>(
+      'emits [LoginSuccess, LoginSuccess] when already login or have data on storage',
+      build: () {
+        when(mockStorageManager.loadLoginEntity()).thenAnswer((_) async => loginEntity);
+        when(mockStorageManager.loadToken()).thenAnswer((_) async => "ABC");
+
+        return LoginBloc(loginUseCase: mockLoginUseCase, storage: mockStorageManager);
+      },
+      act: (bloc) => bloc.add(LoginStarted()),
+      expect: () => [
+        isA<LoginSuccess>().having((s) => s.user.nik, 'nik', "EK4NIK000"),
       ],
     );
   });

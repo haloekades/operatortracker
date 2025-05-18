@@ -1,13 +1,14 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:operatortracker/core/services/websocket_service.dart';
-import 'package:operatortracker/core/session/SessionManager.dart';
+import 'package:operatortracker/core/session/storage_manager.dart';
 import 'package:operatortracker/features/chat/data/repositories/chat_repository_impl.dart';
 import 'package:operatortracker/features/chat/domain/repositories/chat_repository.dart';
 import 'package:operatortracker/features/chat/domain/usecases/get_messages_use_case.dart';
 import 'package:operatortracker/features/chat/domain/usecases/listen_chat_messages_use_case.dart';
 import 'package:operatortracker/features/chat/domain/usecases/send_message_use_case.dart';
 import 'package:operatortracker/features/chat/presentation/bloc/chat_bloc.dart';
+import 'package:operatortracker/features/home/presentation/bloc/home_bloc.dart';
 import 'package:operatortracker/features/login/data/datasources/login_remote_datasource.dart';
 import 'package:operatortracker/features/login/data/repositories/login_repository_impl.dart';
 import 'package:operatortracker/features/login/domain/repositories/login_repository.dart';
@@ -23,50 +24,50 @@ import '../../features/registrationdevice/presentation/bloc/installation_bloc.da
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Bloc
+  // Installation
   sl.registerFactory(
-    () => InstallationBloc(
-      checkDevice: sl(),
-      registerDevice: sl(),
-    ),
+    () => InstallationBloc(checkDevice: sl(), registerDevice: sl()),
   );
-
-  // Use cases
   sl.registerLazySingleton(() => CheckDeviceUseCase(sl()));
   sl.registerLazySingleton(() => RegisterDeviceUseCase(sl()));
-
-  // Repository
   sl.registerLazySingleton<InstallationRepository>(
     () => InstallationRepositoryImpl(remoteDataSource: sl()),
   );
-
-  // Data source
   sl.registerLazySingleton<InstallationRemoteDataSource>(
     () => InstallationRemoteDataSourceImpl(client: sl()),
   );
 
-  // External
-  sl.registerLazySingleton(() => http.Client());
 
   // Login Feature
-  sl.registerFactory(() => LoginBloc(loginUseCase: sl()));
+  sl.registerFactory(() => LoginBloc(loginUseCase: sl(), storage: sl()));
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton<LoginRepository>(() => LoginRepositoryImpl(sl()));
   sl.registerLazySingleton<LoginRemoteDataSource>(
     () => LoginRemoteDataSourceImpl(client: sl()),
   );
 
-  sl.registerLazySingleton<WebSocketService>(() => WebSocketService());
+  // Home Feature
+  sl.registerFactory(() => HomeBloc(webSocketService: sl(), storageManager: sl()));
 
   // Chat Feature
-  sl.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(sl(), sl()));
+  sl.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(sl(), sl()),
+  );
   sl.registerLazySingleton(() => GetChatMessagesUseCase(sl()));
   sl.registerLazySingleton(() => SendChatMessageUseCase(sl()));
   sl.registerLazySingleton(() => ListenChatMessagesUseCase(sl()));
   sl.registerFactory(
-    () => ChatBloc(getMessages: sl(), sendMessage: sl(), listenMessages: sl()),
+    () => ChatBloc(
+      getMessages: sl(),
+      sendMessage: sl(),
+      listenMessages: sl(),
+      storageManager: sl(),
+    ),
   );
 
-  sl.registerLazySingleton(() => SessionManager());
-
+  // Core
+  // sl.registerLazySingleton(() => SessionManager());
+  sl.registerLazySingleton(() => StorageManager());
+  sl.registerLazySingleton<WebSocketService>(() => WebSocketService());
+  sl.registerLazySingleton(() => http.Client());
 }

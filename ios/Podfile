@@ -1,0 +1,23 @@
+# ✅ Set the minimum iOS version
+platform :ios, '12.0'
+
+# ✅ Load Flutter CocoaPods integration
+require File.join(File.dirname(__FILE__), 'Flutter', 'podhelper.rb')
+
+# ✅ Only one use_frameworks!
+use_frameworks!
+
+target 'Runner' do
+  flutter_install_all_ios_pods(File.dirname(File.realpath(__FILE__)))
+
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
+
+# ✅ Flutter post-install configs
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+  end
+end

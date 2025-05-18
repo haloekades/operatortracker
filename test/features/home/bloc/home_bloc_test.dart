@@ -7,13 +7,16 @@ import 'package:operatortracker/features/home/presentation/bloc/home_event.dart'
 import 'package:operatortracker/features/home/presentation/bloc/home_state.dart';
 import 'package:operatortracker/features/login/domain/entities/login_entity.dart';
 
+import '../../../mocks/mock_chat.mocks.dart';
 import '../../../mocks/mock_websocket_service.mocks.dart';
 
 void main() {
   late MockWebSocketService mockWebSocketService;
+  late MockStorageManager mockStorageManager;
 
   setUp(() {
     mockWebSocketService = MockWebSocketService();
+    mockStorageManager = MockStorageManager();
   });
 
   group('HomeBloc', () {
@@ -49,7 +52,7 @@ void main() {
           callback(msgModel);
         });
 
-        return HomeBloc(mockWebSocketService);
+        return HomeBloc(webSocketService: mockWebSocketService, storageManager: mockStorageManager);
       },
       act: (bloc) => bloc.add(HomeStarted(login)),
       expect:

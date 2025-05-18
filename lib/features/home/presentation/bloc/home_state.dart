@@ -20,3 +20,8 @@ class HomeLoaded extends HomeState {
   @override
   List<Object?> get props => [loginEntity, message];
 }
+
+class HomeExit extends HomeState {
+  @override
+  List<Object> get props => [];
+}

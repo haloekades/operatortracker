@@ -6,6 +6,7 @@
 import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:operatortracker/core/session/storage_manager.dart' as _i8;
 import 'package:operatortracker/features/chat/domain/entities/message_entity.dart'
     as _i2;
 import 'package:operatortracker/features/chat/domain/repositories/chat_repository.dart'
@@ -16,6 +17,8 @@ import 'package:operatortracker/features/chat/domain/usecases/listen_chat_messag
     as _i7;
 import 'package:operatortracker/features/chat/domain/usecases/send_message_use_case.dart'
     as _i6;
+import 'package:operatortracker/features/login/domain/entities/login_entity.dart'
+    as _i9;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -182,4 +185,74 @@ class MockListenChatMessagesUseCase extends _i1.Mock
         Invocation.method(#call, [unitId, onMessage]),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [StorageManager].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockStorageManager extends _i1.Mock implements _i8.StorageManager {
+  MockStorageManager() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<void> saveLoginEntity(_i9.LoginEntity? entity) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveLoginEntity, [entity]),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
+
+  @override
+  _i4.Future<_i9.LoginEntity?> loadLoginEntity() =>
+      (super.noSuchMethod(
+            Invocation.method(#loadLoginEntity, []),
+            returnValue: _i4.Future<_i9.LoginEntity?>.value(),
+          )
+          as _i4.Future<_i9.LoginEntity?>);
+
+  @override
+  _i4.Future<void> clearLoginEntity() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearLoginEntity, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> saveToken(String? token) =>
+      (super.noSuchMethod(
+            Invocation.method(#saveToken, [token]),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
+
+  @override
+  _i4.Future<String?> loadToken() =>
+      (super.noSuchMethod(
+            Invocation.method(#loadToken, []),
+            returnValue: _i4.Future<String?>.value(),
+          )
+          as _i4.Future<String?>);
+
+  @override
+  _i4.Future<void> clearToken() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearToken, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
+
+  @override
+  _i4.Future<void> clearAllData() =>
+      (super.noSuchMethod(
+            Invocation.method(#clearAllData, []),
+            returnValue: _i4.Future<void>.value(),
+            returnValueForMissingStub: _i4.Future<void>.value(),
+          )
+          as _i4.Future<void>);
 }
